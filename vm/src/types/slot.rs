@@ -235,7 +235,7 @@ fn setitem_wrapper<K: ToPyObject>(
     .map(drop)
 }
 
-fn hash_wrapper(zelf: &PyObject, vm: &VirtualMachine) -> PyResult<PyHash> {
+pub fn hash_wrapper(zelf: &PyObject, vm: &VirtualMachine) -> PyResult<PyHash> {
     let hash_obj = vm.call_special_method(zelf.to_owned(), identifier!(vm, __hash__), ())?;
     match hash_obj.payload_if_subclass::<PyInt>(vm) {
         Some(py_int) => Ok(rustpython_common::hash::hash_bigint(py_int.as_bigint())),

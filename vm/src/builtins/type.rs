@@ -27,6 +27,7 @@ use crate::{
 use indexmap::{map::Entry, IndexMap};
 use itertools::Itertools;
 use std::{borrow::Borrow, collections::HashSet, fmt, ops::Deref, pin::Pin, ptr::NonNull};
+use crate::types::hash_wrapper;
 
 #[pyclass(module = false, name = "type")]
 pub struct PyType {
@@ -382,6 +383,14 @@ impl PyType {
                 zelf = zelf.name(),
                 subtype = subtype.name(),
             )));
+        }
+
+        // TODO: hashable 상속 문제도 고려해야 함
+        match zelf.name().as_ref() {
+            "bytearray" | "list" | "dict" | "set" => {
+                zelf.attributes.write().insert(vm.ctx.names.__hash__, vm.ctx.none.clone().into());
+            }
+            _ => {}
         }
         call_slot_new(zelf, subtype, args, vm)
     }
