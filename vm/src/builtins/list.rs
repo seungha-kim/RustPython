@@ -91,7 +91,6 @@ pub type PyListRef = PyRef<PyList>;
         Initializer,
         AsMapping,
         Iterable,
-        Hashable,
         Comparable,
         AsSequence
     ),

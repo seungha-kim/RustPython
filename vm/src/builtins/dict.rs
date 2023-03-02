@@ -206,7 +206,6 @@ impl PyDict {
         Constructor,
         Initializer,
         AsMapping,
-        Hashable,
         Comparable,
         Iterable,
         AsSequence

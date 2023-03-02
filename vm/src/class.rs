@@ -112,6 +112,14 @@ pub trait PyClassImpl: PyClassDef {
                     .into();
             class.set_attr(identifier!(ctx, __new__), bound);
         }
+        // 여기구만
+        // 여기에서 payload unhashable 인걸 체크하기
+
+        // 이렇게 하면 광역으로 문제가...
+        // e.g. module 만들 때 function 이 hashable 이 아니게 돼서
+        if class.slots.hash.load().is_none() {
+            class.set_attr(identifier!(ctx, __hash__), ctx.none.to_owned().into());
+        }
     }
 
     fn make_class(ctx: &Context) -> PyTypeRef

@@ -241,6 +241,7 @@ impl<T: Clone> Dict<T> {
     where
         K: DictKey + ?Sized,
     {
+        // 아마 여기가 문제일 것 같은데
         let hash = key.key_hash(vm)?;
         let _removed = loop {
             let (entry_index, index_index) = self.lookup(vm, key, hash, None)?;

@@ -488,7 +488,7 @@ fn reduce_set(
 }
 
 #[pyclass(
-    with(Constructor, Initializer, AsSequence, Hashable, Comparable, Iterable),
+    with(Constructor, Initializer, AsSequence, Comparable, Iterable),
     flags(BASETYPE)
 )]
 impl PySet {

@@ -518,13 +518,14 @@ impl PyObject {
     }
 
     pub fn hash(&self, vm: &VirtualMachine) -> PyResult<PyHash> {
-        let hash = self.get_class_attr(identifier!(vm, __hash__)).unwrap();
-        if vm.is_none(&hash) {
-            return Err(vm.new_exception_msg(
-                vm.ctx.exceptions.type_error.to_owned(),
-                format!("unhashable type: '{}'", self.class().name()),
-            ));
-        }
+        // 이 함수는 내부용으로 쓰이는거라... 이렇게 에러를 뱉지 않게 만들어도 되지 않으려나
+        // let hash = self.get_class_attr(identifier!(vm, __hash__)).unwrap();
+        // if vm.is_none(&hash) {
+        //     return Err(vm.new_exception_msg(
+        //         vm.ctx.exceptions.type_error.to_owned(),
+        //         format!("unhashable type: '{}'", self.class().name()),
+        //     ));
+        // }
 
         let hash = self
             .class()

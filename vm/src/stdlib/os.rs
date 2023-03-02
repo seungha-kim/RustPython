@@ -1805,7 +1805,8 @@ pub fn extend_module(vm: &VirtualMachine, module: &PyObject) {
     for support in support_funcs {
         let func_obj = module.to_owned().get_attr(support.name, vm).unwrap();
         if support.fd.unwrap_or(false) {
-            supports_fd.clone().add(func_obj.clone(), vm).unwrap();
+            let result = supports_fd.clone().add(func_obj.clone(), vm);
+            result.unwrap();
         }
         if support.dir_fd.unwrap_or(false) {
             supports_dir_fd.clone().add(func_obj.clone(), vm).unwrap();
