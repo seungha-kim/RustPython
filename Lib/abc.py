@@ -87,6 +87,7 @@ try:
                       _reset_registry, _reset_caches)
 # TODO: RUSTPYTHON missing _abc module implementation.
 except ModuleNotFoundError:
+    # 이쪽
     from _py_abc import ABCMeta, get_cache_token
     ABCMeta.__module__ = 'abc'
 except ImportError:

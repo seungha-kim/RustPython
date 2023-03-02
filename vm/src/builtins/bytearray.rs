@@ -91,6 +91,9 @@ impl PyPayload for PyByteArray {
 pub(crate) fn init(context: &Context) {
     PyByteArray::extend_class(context, context.types.bytearray_type);
     PyByteArrayIterator::extend_class(context, context.types.bytearray_iterator_type);
+
+    // Mark type as unhashable
+    // context.types.bytearray_type.attributes.write().insert(context.names.__hash__, context.none.clone().into());
 }
 
 #[pyclass(
@@ -98,7 +101,6 @@ pub(crate) fn init(context: &Context) {
     with(
         Constructor,
         Initializer,
-        Hashable,
         Comparable,
         AsBuffer,
         AsMapping,

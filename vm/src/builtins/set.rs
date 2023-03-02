@@ -1131,4 +1131,7 @@ pub fn init(context: &Context) {
     PySet::extend_class(context, context.types.set_type);
     PyFrozenSet::extend_class(context, context.types.frozenset_type);
     PySetIterator::extend_class(context, context.types.set_iterator_type);
+
+    // Mark type as unhashable
+    // context.types.set_type.attributes.write().insert(context.names.__hash__, context.none.clone().into());
 }

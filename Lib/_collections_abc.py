@@ -80,6 +80,8 @@ def _check_methods(C, *methods):
     for method in methods:
         for B in mro:
             if method in B.__dict__:
+                # class attribute 에 __hash__ 가 있는데 None 인 경우에는 unhashable 로 친다.
+                # bytearray.__dict__["__hash__"] is None
                 if B.__dict__[method] is None:
                     return NotImplemented
                 break

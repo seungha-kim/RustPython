@@ -660,6 +660,10 @@ pub trait Hashable: PyPayload {
         Self::slot_hash(&zelf, vm)
     }
 
+    fn is_hashable() -> bool {
+        true
+    }
+
     fn hash(zelf: &Py<Self>, vm: &VirtualMachine) -> PyResult<PyHash>;
 }
 
@@ -671,6 +675,10 @@ where
 {
     fn slot_hash(zelf: &PyObject, vm: &VirtualMachine) -> PyResult<PyHash> {
         Err(vm.new_type_error(format!("unhashable type: '{}'", zelf.class().name())))
+    }
+
+    fn is_hashable() -> bool {
+        false
     }
 
     #[cold]

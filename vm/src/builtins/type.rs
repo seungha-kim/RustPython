@@ -383,6 +383,19 @@ impl PyType {
                 subtype = subtype.name(),
             )));
         }
+
+        // 이 변경사항이 weakrefset 에 영향을 미치는 것 같다..
+        // File "/Users/user/dev/RustPython/pylib/Lib/_weakrefset.py", line 80, in __contains__
+        //     return wr in self.data
+        //
+        if zelf.slots.hash.load().is_none() {
+            zelf.attributes.write().insert(vm.ctx.names.__hash__, vm.ctx.none.clone().into());
+        }
+
+        // Unhashable 로 판단하면 되려나? 근데 부작용을 일으키는 코드는 어차피 똑같지 않나?
+        // 아니지 slot 으로 판단하는게 아니라 unhashable 로 판단하는 거지
+        // weakrefset
+
         call_slot_new(zelf, subtype, args, vm)
     }
 

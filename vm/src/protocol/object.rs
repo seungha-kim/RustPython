@@ -485,6 +485,9 @@ impl PyObject {
     pub fn is_instance(&self, cls: &PyObject, vm: &VirtualMachine) -> PyResult<bool> {
         // cpython first does an exact check on the type, although documentation doesn't state that
         // https://github.com/python/cpython/blob/a24107b04c1277e3c1105f98aff5bfa3a98b33a0/Objects/abstract.c#L2408
+        // what happens here?
+        // from collections.abc import Hashable; isinstance(bytearray(), Hashable)
+        // from collections.abc import Hashable; Hashable.__instancecheck__(bytearray())
         if self.class().is(cls) {
             return Ok(true);
         }
