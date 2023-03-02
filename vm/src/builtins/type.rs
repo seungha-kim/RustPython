@@ -222,6 +222,21 @@ impl PyType {
             new_type.update_slot::<true>(attr_name, ctx);
         }
 
+        /*
+        정리
+        - Unhashable 디자인에 문제가 있음
+        - Unhashable trait 없애고, Hashable 을 구현하지 않았으면 (즉, slot 에 hash 가 없으면?) Unhashable 로 간주
+            - 여기서 고려할 것이, collections.abc.Hashable 과 slot.Hashable 은 역할이 다르긴 함
+        - 아이디어 1: Hashable 을 구현하지 않았다면 슬롯에 hash_wrapper 가 들어있을테니, 그걸 이용해서 None 대입
+        - Hashable 상속 문제도 고려해야 함
+        - 슬랙 멘션 참고 1: https://line-enterprise.slack.com/archives/C04PN6XES81/p1677746981191339
+        - 슬랙 멘션 참고 2: https://line-enterprise.slack.com/archives/C04PN6XES81/p1677747609713609
+         */
+        if new_type.slots.hash.load().map(|h| h as usize == hash_wrapper as usize).unwrap_or(false) {
+            println!("DEBUG: class with hash_wrapper: {}", name);
+            new_type.attributes.write().insert(ctx.names.__hash__, ctx.none.clone().into());
+        }
+
         let weakref_type = super::PyWeak::static_type();
         for base in &new_type.bases {
             base.subclasses.write().push(
@@ -385,13 +400,6 @@ impl PyType {
             )));
         }
 
-        // TODO: hashable 상속 문제도 고려해야 함
-        match zelf.name().as_ref() {
-            "bytearray" | "list" | "dict" | "set" => {
-                zelf.attributes.write().insert(vm.ctx.names.__hash__, vm.ctx.none.clone().into());
-            }
-            _ => {}
-        }
         call_slot_new(zelf, subtype, args, vm)
     }
 
