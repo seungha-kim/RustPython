@@ -16,8 +16,8 @@ use crate::{
     protocol::{PyIterReturn, PySequenceMethods},
     recursion::ReprGuard,
     types::{
-        AsSequence, Comparable, Constructor, Hashable, Initializer, IterNext, IterNextIterable,
-        Iterable, PyComparisonOp, Unconstructible, Unhashable,
+        AsSequence, Comparable, Constructor, Initializer, IterNext, IterNextIterable,
+        Iterable, PyComparisonOp, Unconstructible, Hashable,
     },
     utils::collection_repr,
     vm::VirtualMachine,
@@ -488,7 +488,7 @@ fn reduce_set(
 }
 
 #[pyclass(
-    with(Constructor, Initializer, AsSequence, Hashable, Comparable, Iterable),
+    with(Constructor, Initializer, AsSequence, Comparable, Iterable),
     flags(BASETYPE)
 )]
 impl PySet {
@@ -783,8 +783,6 @@ impl Comparable for PySet {
         })
     }
 }
-
-impl Unhashable for PySet {}
 
 impl Iterable for PySet {
     fn iter(zelf: PyRef<Self>, vm: &VirtualMachine) -> PyResult {

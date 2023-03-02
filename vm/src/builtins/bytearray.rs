@@ -30,14 +30,15 @@ use crate::{
     },
     sliceable::{SequenceIndex, SliceableSequenceMutOp, SliceableSequenceOp},
     types::{
-        AsBuffer, AsMapping, AsSequence, Callable, Comparable, Constructor, Hashable, Initializer,
-        IterNext, IterNextIterable, Iterable, PyComparisonOp, Unconstructible, Unhashable,
+        AsBuffer, AsMapping, AsSequence, Callable, Comparable, Constructor, Initializer,
+        IterNext, IterNextIterable, Iterable, PyComparisonOp, Unconstructible,
     },
     AsObject, Context, Py, PyObject, PyObjectRef, PyPayload, PyRef, PyResult, TryFromObject,
     VirtualMachine,
 };
 use bstr::ByteSlice;
 use std::mem::size_of;
+use rustpython_common::hash::PyHash;
 
 #[pyclass(module = false, name = "bytearray")]
 #[derive(Debug, Default)]
@@ -98,7 +99,6 @@ pub(crate) fn init(context: &Context) {
     with(
         Constructor,
         Initializer,
-        Hashable,
         Comparable,
         AsBuffer,
         AsMapping,
@@ -855,8 +855,6 @@ impl AsSequence for PyByteArray {
         &AS_SEQUENCE
     }
 }
-
-impl Unhashable for PyByteArray {}
 
 impl Iterable for PyByteArray {
     fn iter(zelf: PyRef<Self>, vm: &VirtualMachine) -> PyResult {

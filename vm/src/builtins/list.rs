@@ -14,7 +14,7 @@ use crate::{
     sliceable::{SequenceIndex, SliceableSequenceMutOp, SliceableSequenceOp},
     types::{
         AsMapping, AsSequence, Comparable, Constructor, Hashable, Initializer, IterNext,
-        IterNextIterable, Iterable, PyComparisonOp, Unconstructible, Unhashable,
+        IterNextIterable, Iterable, PyComparisonOp, Unconstructible,
     },
     utils::collection_repr,
     vm::VirtualMachine,
@@ -91,7 +91,6 @@ pub type PyListRef = PyRef<PyList>;
         Initializer,
         AsMapping,
         Iterable,
-        Hashable,
         Comparable,
         AsSequence
     ),
@@ -493,8 +492,6 @@ impl Comparable for PyList {
             .map(PyComparisonValue::Implemented)
     }
 }
-
-impl Unhashable for PyList {}
 
 fn do_sort(
     vm: &VirtualMachine,

@@ -663,22 +663,6 @@ pub trait Hashable: PyPayload {
     fn hash(zelf: &Py<Self>, vm: &VirtualMachine) -> PyResult<PyHash>;
 }
 
-pub trait Unhashable: PyPayload {}
-
-impl<T> Hashable for T
-where
-    T: Unhashable,
-{
-    fn slot_hash(zelf: &PyObject, vm: &VirtualMachine) -> PyResult<PyHash> {
-        Err(vm.new_type_error(format!("unhashable type: '{}'", zelf.class().name())))
-    }
-
-    #[cold]
-    fn hash(_zelf: &Py<Self>, _vm: &VirtualMachine) -> PyResult<PyHash> {
-        unreachable!("slot_hash is implemented for unhashable types");
-    }
-}
-
 #[pyclass]
 pub trait Comparable: PyPayload {
     #[inline]

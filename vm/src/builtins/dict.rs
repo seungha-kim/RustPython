@@ -20,7 +20,7 @@ use crate::{
     recursion::ReprGuard,
     types::{
         AsMapping, AsSequence, Callable, Comparable, Constructor, Hashable, Initializer, IterNext,
-        IterNextIterable, Iterable, PyComparisonOp, Unconstructible, Unhashable,
+        IterNextIterable, Iterable, PyComparisonOp, Unconstructible,
     },
     vm::VirtualMachine,
     AsObject, Context, Py, PyObject, PyObjectRef, PyPayload, PyRef, PyRefExact, PyResult,
@@ -206,7 +206,6 @@ impl PyDict {
         Constructor,
         Initializer,
         AsMapping,
-        Hashable,
         Comparable,
         Iterable,
         AsSequence
@@ -490,8 +489,6 @@ impl Comparable for PyDict {
         })
     }
 }
-
-impl Unhashable for PyDict {}
 
 impl Iterable for PyDict {
     fn iter(zelf: PyRef<Self>, vm: &VirtualMachine) -> PyResult {

@@ -5,11 +5,12 @@ use crate::{
     convert::ToPyObject,
     function::{FuncArgs, OptionalArg, PyComparisonValue},
     sliceable::SaturatedSlice,
-    types::{Comparable, Constructor, Hashable, PyComparisonOp, Unhashable},
+    types::{Comparable, Constructor, Hashable, PyComparisonOp},
     AsObject, Context, Py, PyObject, PyObjectRef, PyPayload, PyRef, PyResult, VirtualMachine,
 };
 use num_bigint::{BigInt, ToBigInt};
 use num_traits::{One, Signed, Zero};
+use rustpython_common::hash::{PyHash, MODULUS};
 
 #[pyclass(module = false, name = "slice")]
 #[derive(Debug)]
@@ -258,7 +259,19 @@ impl Comparable for PySlice {
     }
 }
 
-impl Unhashable for PySlice {}
+impl Hashable for PySlice {
+    fn hash(zelf: &Py<Self>, vm: &VirtualMachine) -> PyResult<PyHash> {
+        let mut result = 0;
+        if let Some(start) = &zelf.start {
+            result |= start.hash(vm)?;
+        }
+        result |= zelf.stop.hash(vm)?;
+        if let Some(step) = &zelf.start {
+            result |= step.hash(vm)?;
+        }
+        Ok(result)
+    }
+}
 
 #[pyclass(module = false, name = "EllipsisType")]
 #[derive(Debug)]
