@@ -619,4 +619,8 @@ pub fn init(context: &Context) {
 
     PyListIterator::extend_class(context, context.types.list_iterator_type);
     PyListReverseIterator::extend_class(context, context.types.list_reverseiterator_type);
+
+    // Mark type as unhashable
+    // TODO: generalize using Unhashable trait
+    list_type.attributes.write().insert(context.names.__hash__, context.none.to_owned().into());
 }

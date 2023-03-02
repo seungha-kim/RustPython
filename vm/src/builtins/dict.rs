@@ -1153,4 +1153,8 @@ pub(crate) fn init(context: &Context) {
     PyDictItems::extend_class(context, context.types.dict_items_type);
     PyDictItemIterator::extend_class(context, context.types.dict_itemiterator_type);
     PyDictReverseItemIterator::extend_class(context, context.types.dict_reverseitemiterator_type);
+
+    // Mark type as unhashable
+    // TODO: generalize using Unhashable trait
+    context.types.dict_type.attributes.write().insert(context.names.__hash__, context.none.to_owned().into());
 }
